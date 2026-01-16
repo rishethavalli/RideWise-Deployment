@@ -3,12 +3,12 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import pickle
 import numpy as np
-import os
+from pathlib import Path
 
 app = FastAPI()
 
-# Get the directory where this script is located
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Resolve to backend directory for model files (works locally and on Render)
+MODEL_DIR = Path(__file__).resolve().parent
 
 # Allow frontend
 app.add_middleware(
@@ -26,9 +26,9 @@ def safe_load_pickle(path: str):
     If unpickling fails, return None so we can fall back to heuristic predictions
     instead of crashing the server.
     """
-    # Convert to absolute path if not already
-    if not os.path.isabs(path):
-        path = os.path.join(BASE_DIR, path)
+    target = Path(path)
+    if not target.is_absolute():
+        target = MODEL_DIR / target
     
     # Try multiple loading strategies for compatibility
     strategies = [
@@ -40,13 +40,13 @@ def safe_load_pickle(path: str):
     
     for strategy in strategies:
         try:
-            with open(path, "rb") as f:
+            with target.open("rb") as f:
                 return strategy(f)
         except Exception as e:
             continue
     
     # If all strategies fail, warn and return None
-    print(f"[WARN] Failed to load pickle {os.path.basename(path)} with all strategies. Using fallback predictions.")
+    print(f"[WARN] Failed to load pickle {target.name} with all strategies. Using fallback predictions.")
     return None
 
 
