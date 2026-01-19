@@ -1,9 +1,8 @@
 "use client"
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { PageHeader } from "@/components/page-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, BarChart3, Brain, Database, Zap } from "lucide-react"
+import { BarChart3, Brain, Database, Zap } from "lucide-react"
 
 export default function AboutPage() {
   const features = [
@@ -30,117 +29,115 @@ export default function AboutPage() {
   ]
 
   return (
-    <div className="relative min-h-screen p-4">
-      {/* Background image with overlay */}
+    <div className="relative min-h-screen">
       <div className="fixed inset-0 -z-10">
         <div
-          className="absolute inset-0 bg-cover bg-center blur-sm"
-          style={{ backgroundImage: "url(/images/background.png)" }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url(/images/background.png)",
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/65 to-slate-900/70" />
       </div>
 
-      <div className="mx-auto max-w-4xl py-8">
-        <Link href="/welcome">
-          <Button variant="ghost" className="mb-6 text-foreground hover:bg-white/10">
-            <ArrowLeft className="mr-2 size-4" />
-            Back to Home
-          </Button>
-        </Link>
+      <div className="relative z-10 min-h-screen">
+        <PageHeader title="About RideWise" />
 
-        <h1 className="mb-8 text-center text-4xl font-bold text-primary drop-shadow-[0_0_20px_rgba(60,242,255,0.8)]">
-          About RideWise
-        </h1>
+        <div className="mx-auto max-w-4xl p-4 py-8">
+          <h1 className="mb-8 text-center text-4xl font-bold text-white drop-shadow-[0_0_10px_rgba(0,166,81,0.5)]">
+            About <span className="text-[#00a651]">RideWise</span>
+          </h1>
 
-        {/* Main Card */}
-        <Card className="mb-8 border-white/20 bg-white/10 shadow-2xl backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="text-2xl text-foreground">Intelligent Urban Mobility</CardTitle>
-            <CardDescription className="text-foreground/70">
-              Transforming bike sharing with AI-powered demand forecasting
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4 text-foreground/80">
-            <p>
-              RideWise is an advanced AI platform designed to revolutionize bike sharing operations through accurate
-              demand prediction. Our machine learning models analyze multiple factors to help cities and operators
-              optimize their services.
-            </p>
-            <p>
-              By leveraging historical data, weather patterns, seasonal trends, and real-time conditions, RideWise
-              provides actionable insights that improve service availability, reduce operational costs, and enhance user
-              satisfaction.
-            </p>
-          </CardContent>
-        </Card>
+          {/* Main Card - Updated card styling */}
+          <Card className="mb-8 border-white/10 bg-white/95 shadow-2xl backdrop-blur-xl">
+            <CardHeader>
+              <CardTitle className="text-2xl text-gray-800">Intelligent Urban Mobility</CardTitle>
+              <CardDescription className="text-gray-600">
+                Transforming bike sharing with AI-powered demand forecasting
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 text-gray-700">
+              <p>
+                RideWise is an advanced AI platform designed to revolutionize bike sharing operations through accurate
+                demand prediction. Our machine learning models analyze multiple factors to help cities and operators
+                optimize their services.
+              </p>
+              <p>
+                By leveraging historical data, weather patterns, seasonal trends, and real-time conditions, RideWise
+                provides actionable insights that improve service availability, reduce operational costs, and enhance
+                user satisfaction.
+              </p>
+            </CardContent>
+          </Card>
 
-        {/* Features Grid */}
-        <div className="mb-8 grid gap-6 sm:grid-cols-2">
-          {features.map((feature) => {
-            const Icon = feature.icon
-            return (
-              <Card
-                key={feature.title}
-                className="border-white/20 bg-white/10 shadow-xl backdrop-blur-xl transition-all hover:border-primary/30 hover:shadow-[0_0_20px_rgba(60,242,255,0.4)]"
-              >
-                <CardHeader>
-                  <div className="mb-3 inline-flex rounded-full bg-primary/20 p-3 shadow-lg shadow-primary/50">
-                    <Icon className="size-6 text-primary" />
-                  </div>
-                  <CardTitle className="text-foreground">{feature.title}</CardTitle>
-                  <CardDescription className="text-foreground/70">{feature.description}</CardDescription>
-                </CardHeader>
-              </Card>
-            )
-          })}
+          {/* Features Grid */}
+          <div className="mb-8 grid gap-6 sm:grid-cols-2">
+            {features.map((feature) => {
+              const Icon = feature.icon
+              return (
+                <Card
+                  key={feature.title}
+                  className="border-white/10 bg-white/95 shadow-xl backdrop-blur-xl transition-all hover:border-[#00a651]/30 hover:shadow-[0_0_20px_rgba(0,166,81,0.3)]"
+                >
+                  <CardHeader>
+                    <div className="mb-3 inline-flex rounded-full bg-[#00a651]/10 p-3 shadow-lg">
+                      <Icon className="size-6 text-[#00a651]" />
+                    </div>
+                    <CardTitle className="text-gray-800">{feature.title}</CardTitle>
+                    <CardDescription className="text-gray-600">{feature.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              )
+            })}
+          </div>
+
+          {/* Benefits Card */}
+          <Card className="border-white/10 bg-white/95 shadow-2xl backdrop-blur-xl">
+            <CardHeader>
+              <CardTitle className="text-gray-800">Why Choose RideWise?</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3 text-gray-700">
+                <li className="flex items-start gap-3">
+                  <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#00a651]/20 text-xs text-[#00a651]">
+                    ✓
+                  </span>
+                  <span>
+                    <strong className="text-[#00a651]">Reduce Empty Stations:</strong> Predict high-demand areas to
+                    ensure bikes are always available
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#00a651]/20 text-xs text-[#00a651]">
+                    ✓
+                  </span>
+                  <span>
+                    <strong className="text-[#00a651]">Optimize Fleet Size:</strong> Right-size your fleet based on
+                    predicted demand patterns
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#00a651]/20 text-xs text-[#00a651]">
+                    ✓
+                  </span>
+                  <span>
+                    <strong className="text-[#00a651]">Improve User Satisfaction:</strong> Ensure bikes are available
+                    when and where users need them
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#00a651]/20 text-xs text-[#00a651]">
+                    ✓
+                  </span>
+                  <span>
+                    <strong className="text-[#00a651]">Lower Operational Costs:</strong> Reduce unnecessary bike
+                    redistribution and maintenance
+                  </span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
         </div>
-
-        {/* Benefits Card */}
-        <Card className="border-white/20 bg-white/10 shadow-2xl backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="text-foreground">Why Choose RideWise?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-3 text-foreground/80">
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs text-primary">
-                  ✓
-                </span>
-                <span>
-                  <strong className="text-primary">Reduce Empty Stations:</strong> Predict high-demand areas to ensure
-                  bikes are always available
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs text-primary">
-                  ✓
-                </span>
-                <span>
-                  <strong className="text-primary">Optimize Fleet Size:</strong> Right-size your fleet based on
-                  predicted demand patterns
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs text-primary">
-                  ✓
-                </span>
-                <span>
-                  <strong className="text-primary">Improve User Satisfaction:</strong> Ensure bikes are available when
-                  and where users need them
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs text-primary">
-                  ✓
-                </span>
-                <span>
-                  <strong className="text-primary">Lower Operational Costs:</strong> Reduce unnecessary bike
-                  redistribution and maintenance
-                </span>
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
       </div>
     </div>
   )

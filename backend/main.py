@@ -4,6 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 import pickle
 import numpy as np
 import os
+from fastapi import UploadFile, File
+from typing import Dict
+
+try:
+    from . import pdf_utils  # when imported as package 'backend'
+except ImportError:
+    import pdf_utils  # when running as a script within backend folder
 
 app = FastAPI()
 
@@ -191,6 +198,62 @@ def predict_hour(data: PredictInput):
 @app.get("/")
 def root():
     return {"status": "RideWise backend running"}
+
+# --- PDF Feature Extraction Endpoints ---
+
+def _map_features_to_predict_input(features: Dict, mode: str) -> Dict:
+    """Map Gemini features to PredictInput-compatible dict (do not validate here)."""
+    # season/weather expected as strings already (spring/summer/fall/winter, clear/cloudy/rain/storm)
+    return {
+        "season": str(features.get("season", "")),
+        "month": int(features.get("month", 0) or 0),
+        "day_of_week": int(features.get("day_of_week", 0) or 0),
+        "hour": int(features.get("hour", 0) or (0 if mode == "hour" else 12)),
+        "temp": float(features.get("temperature", 0.0) or 0.0),
+        "hum": float(features.get("humidity", 0.0) or 0.0),
+        "wind": float(features.get("wind_speed", 0.0) or 0.0),
+        "weather": str(features.get("weather", "")),
+        "holiday": int(features.get("holiday", 0) or 0),
+        "workingday": int(features.get("working_day", 0) or 0),
+    }
+
+@app.post("/pdf/day")
+async def pdf_day(file: UploadFile = File(...)):
+    """
+    Upload PDF for Day Prediction: extract text, call Gemini, return features + missing fields.
+    """
+    text = pdf_utils.extract_text_from_pdf(file)
+    if not text:
+        return {"error": "Failed to extract text from PDF", "features": {}, "missing_fields": []}
+
+    result = await pdf_utils.call_gemini_for_features(text, mode="day")
+    if result.get("error"):
+        return result
+
+    features = result["features"]
+    missing = result["missing_fields"]
+
+    mapped = _map_features_to_predict_input(features, mode="day")
+    return {"features": features, "missing_fields": missing, "mapped_input": mapped}
+
+@app.post("/pdf/hour")
+async def pdf_hour(file: UploadFile = File(...)):
+    """
+    Upload PDF for Hour Prediction: extract text, call Gemini, return features + missing fields.
+    """
+    text = pdf_utils.extract_text_from_pdf(file)
+    if not text:
+        return {"error": "Failed to extract text from PDF", "features": {}, "missing_fields": []}
+
+    result = await pdf_utils.call_gemini_for_features(text, mode="hour")
+    if result.get("error"):
+        return result
+
+    features = result["features"]
+    missing = result["missing_fields"]
+
+    mapped = _map_features_to_predict_input(features, mode="hour")
+    return {"features": features, "missing_fields": missing, "mapped_input": mapped}
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

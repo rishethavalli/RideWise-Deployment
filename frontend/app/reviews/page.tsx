@@ -3,10 +3,10 @@
 import type React from "react"
 
 import { useState } from "react"
-import Link from "next/link"
+import { PageHeader } from "@/components/page-header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Star } from "lucide-react"
+import { Star } from "lucide-react"
 
 type Review = {
   id: number
@@ -56,126 +56,115 @@ export default function ReviewsPage() {
   }
 
   return (
-    <div className="relative min-h-screen p-4">
-      {/* Background image with overlay */}
+    <div className="relative min-h-screen">
       <div className="fixed inset-0 -z-10">
         <div
-          className="absolute inset-0 bg-cover bg-center blur-sm"
-          style={{ backgroundImage: "url(/images/background.png)" }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url(/images/background.png)",
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/65 to-slate-900/70" />
       </div>
 
-      <div className="mx-auto max-w-4xl py-8">
-        <Link href="/welcome">
-          <Button variant="ghost" className="mb-6 text-foreground hover:bg-white/10">
-            <ArrowLeft className="mr-2 size-4" />
-            Back to Home
-          </Button>
-        </Link>
+      <div className="relative z-10 min-h-screen">
+        <PageHeader title="Reviews" />
 
-        <h1 className="mb-8 text-center text-4xl font-bold text-primary drop-shadow-[0_0_20px_rgba(60,242,255,0.8)]">
-          Reviews
-        </h1>
+        <div className="mx-auto max-w-4xl p-4 py-8">
+          <h1 className="mb-8 text-center text-4xl font-bold text-white drop-shadow-[0_0_10px_rgba(0,166,81,0.5)]">
+            <span className="text-[#00a651]">Reviews</span>
+          </h1>
 
-        {/* Review Form */}
-        <Card className="mb-8 border-white/20 bg-white/10 shadow-2xl backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="text-foreground">Leave a Review</CardTitle>
-            <CardDescription className="text-foreground/70">Share your experience with RideWise</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="mb-2 block text-sm font-medium text-foreground">
-                  Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-lg border border-white/20 bg-black/30 px-4 py-2 text-foreground backdrop-blur-sm transition-all placeholder:text-foreground/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  placeholder="Your name"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-medium text-foreground">Rating</label>
-                <div className="flex gap-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setRating(star)}
-                      className="transition-transform hover:scale-110"
-                    >
-                      <Star
-                        className={`size-8 ${
-                          star <= rating
-                            ? "fill-secondary text-secondary drop-shadow-[0_0_10px_rgba(255,150,60,0.8)]"
-                            : "text-foreground/30"
-                        }`}
-                      />
-                    </button>
-                  ))}
+          {/* Review Form - Updated card styling */}
+          <Card className="mb-8 border-white/10 bg-white/95 shadow-2xl backdrop-blur-xl">
+            <CardHeader>
+              <CardTitle className="text-gray-800">Leave a Review</CardTitle>
+              <CardDescription className="text-gray-600">Share your experience with RideWise</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="name" className="mb-2 block text-sm font-medium text-gray-700">
+                    Name
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 bg-white/90 px-4 py-2 text-gray-800 backdrop-blur-sm transition-all placeholder:text-gray-400 focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[#00a651]/50"
+                    placeholder="Your name"
+                    required
+                  />
                 </div>
-              </div>
 
-              <div>
-                <label htmlFor="text" className="mb-2 block text-sm font-medium text-foreground">
-                  Review
-                </label>
-                <textarea
-                  id="text"
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  rows={4}
-                  className="w-full rounded-lg border border-white/20 bg-black/30 px-4 py-2 text-foreground backdrop-blur-sm transition-all placeholder:text-foreground/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  placeholder="Tell us about your experience..."
-                  required
-                />
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full bg-primary text-primary-foreground shadow-lg shadow-primary/50 transition-all hover:bg-primary/90 hover:shadow-[0_0_30px_rgba(60,242,255,0.6)]"
-              >
-                Submit Review
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-
-        {/* Reviews List */}
-        <div className="space-y-4">
-          {reviews.map((review) => (
-            <Card
-              key={review.id}
-              className="border-white/20 bg-white/10 shadow-xl backdrop-blur-xl transition-all hover:border-primary/30 hover:shadow-[0_0_20px_rgba(60,242,255,0.4)]"
-            >
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-foreground">{review.name}</CardTitle>
-                  <div className="flex gap-1">
-                    {Array.from({ length: 5 }, (_, i) => (
-                      <Star
-                        key={i}
-                        className={`size-4 ${
-                          i < review.rating ? "fill-secondary text-secondary" : "text-foreground/30"
-                        }`}
-                      />
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">Rating</label>
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setRating(star)}
+                        className="transition-transform hover:scale-110"
+                      >
+                        <Star
+                          className={`size-8 ${star <= rating ? "fill-amber-500 text-amber-500" : "text-gray-300"}`}
+                        />
+                      </button>
                     ))}
                   </div>
                 </div>
-                <CardDescription className="text-foreground/70">{review.date}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-foreground/80">{review.text}</p>
-              </CardContent>
-            </Card>
-          ))}
+
+                <div>
+                  <label htmlFor="text" className="mb-2 block text-sm font-medium text-gray-700">
+                    Review
+                  </label>
+                  <textarea
+                    id="text"
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    rows={4}
+                    className="w-full rounded-lg border border-gray-300 bg-white/90 px-4 py-2 text-gray-800 backdrop-blur-sm transition-all placeholder:text-gray-400 focus:border-[#00a651] focus:outline-none focus:ring-2 focus:ring-[#00a651]/50"
+                    placeholder="Tell us about your experience..."
+                    required
+                  />
+                </div>
+
+                <Button type="submit" className="w-full bg-[#00a651] text-white shadow-lg hover:bg-[#008c45]">
+                  Submit Review
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* Reviews List */}
+          <div className="space-y-4">
+            {reviews.map((review) => (
+              <Card
+                key={review.id}
+                className="border-white/10 bg-white/95 shadow-xl backdrop-blur-xl transition-all hover:border-[#00a651]/30 hover:shadow-[0_0_20px_rgba(0,166,81,0.3)]"
+              >
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-gray-800">{review.name}</CardTitle>
+                    <div className="flex gap-1">
+                      {Array.from({ length: 5 }, (_, i) => (
+                        <Star
+                          key={i}
+                          className={`size-4 ${i < review.rating ? "fill-amber-500 text-amber-500" : "text-gray-300"}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <CardDescription className="text-gray-500">{review.date}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-700">{review.text}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -9,3 +9,5 @@ lightgbm
 pydantic
 python-multipart
 streamlit
+PyPDF2
+httpx

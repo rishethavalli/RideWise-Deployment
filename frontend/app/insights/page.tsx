@@ -1,9 +1,9 @@
 "use client"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+
+import { PageHeader } from "@/components/page-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { ArrowLeft, TrendingUp, Calendar, Cloud } from "lucide-react"
+import { TrendingUp, Calendar, Cloud } from "lucide-react"
 import { Line, LineChart, Bar, BarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 
 // Mock data for average demand by hour
@@ -57,214 +57,212 @@ const weatherData = [
 
 export default function InsightsPage() {
   return (
-    <div className="relative min-h-screen p-4">
-      {/* Background image with overlay */}
+    <div className="relative min-h-screen">
       <div className="fixed inset-0 -z-10">
         <div
-          className="absolute inset-0 bg-cover bg-center blur-subtle brightness-110 contrast-110"
-          style={{ backgroundImage: "url(/images/background.png)" }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url(/images/background.png)",
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/78 via-black/68 to-black/78" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/65 to-slate-900/70" />
       </div>
 
-      <div className="mx-auto max-w-6xl py-8">
-        <Link href="/welcome">
-          <Button variant="ghost" className="mb-6 text-foreground hover:bg-white/10">
-            <ArrowLeft className="mr-2 size-4" />
-            Back to Home
-          </Button>
-        </Link>
+      <div className="relative z-10 min-h-screen">
+        <PageHeader title="Demand Insights" />
 
-        <h1 className="mb-8 text-center text-4xl font-bold text-primary drop-shadow-[0_0_20px_rgba(60,242,255,0.8)]">
-          Demand Insights
-        </h1>
+        <div className="mx-auto max-w-6xl p-4 py-8">
+          <h1 className="mb-8 text-center text-4xl font-bold text-white drop-shadow-[0_0_10px_rgba(0,166,81,0.5)]">
+            Demand <span className="text-[#00a651]">Insights</span>
+          </h1>
 
-        {/* Summary Cards */}
-        <div className="mb-8 grid gap-4 sm:grid-cols-3">
-          <Card className="border-white/20 bg-white/10 shadow-xl backdrop-blur-xl">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-medium text-foreground/70">
-                <TrendingUp className="size-4" />
-                Peak Hour
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">18:00</div>
-              <p className="text-xs text-foreground/60">520 avg rides</p>
-            </CardContent>
-          </Card>
+          {/* Summary Cards - Updated card styling */}
+          <div className="mb-8 grid gap-4 sm:grid-cols-3">
+            <Card className="border-white/10 bg-white/95 shadow-xl backdrop-blur-xl">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                  <TrendingUp className="size-4" />
+                  Peak Hour
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-[#00a651]">18:00</div>
+                <p className="text-xs text-gray-500">520 avg rides</p>
+              </CardContent>
+            </Card>
 
-          <Card className="border-white/20 bg-white/10 shadow-xl backdrop-blur-xl">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-medium text-foreground/70">
-                <Calendar className="size-4" />
-                Busiest Day
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">Saturday</div>
-              <p className="text-xs text-foreground/60">5,800 avg rides</p>
-            </CardContent>
-          </Card>
+            <Card className="border-white/10 bg-white/95 shadow-xl backdrop-blur-xl">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                  <Calendar className="size-4" />
+                  Busiest Day
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-[#00a651]">Saturday</div>
+                <p className="text-xs text-gray-500">5,800 avg rides</p>
+              </CardContent>
+            </Card>
 
-          <Card className="border-white/20 bg-white/10 shadow-xl backdrop-blur-xl">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-medium text-foreground/70">
-                <Cloud className="size-4" />
-                Best Weather
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">Clear</div>
-              <p className="text-xs text-foreground/60">5,200 avg rides</p>
-            </CardContent>
-          </Card>
-        </div>
+            <Card className="border-white/10 bg-white/95 shadow-xl backdrop-blur-xl">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                  <Cloud className="size-4" />
+                  Best Weather
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-[#00a651]">Clear</div>
+                <p className="text-xs text-gray-500">5,200 avg rides</p>
+              </CardContent>
+            </Card>
+          </div>
 
-        {/* Charts */}
-        <div className="space-y-6">
-          {/* Average Demand by Hour */}
-          <Card className="border-white/20 bg-white/10 shadow-xl backdrop-blur-xl">
-            <CardHeader>
-              <CardTitle className="text-foreground">Average Demand by Hour</CardTitle>
-              <CardDescription className="text-foreground/70">
-                Typical bike rental patterns throughout the day
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer
-                config={{
-                  demand: {
-                    label: "Rides",
-                    color: "hsl(187, 96%, 62%)",
-                  },
-                }}
-                className="h-[300px] w-full"
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={hourlyData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                    <XAxis dataKey="hour" stroke="rgba(255,255,255,0.5)" tick={{ fill: "rgba(255,255,255,0.7)" }} />
-                    <YAxis stroke="rgba(255,255,255,0.5)" tick={{ fill: "rgba(255,255,255,0.7)" }} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Line
-                      type="monotone"
-                      dataKey="demand"
-                      stroke="hsl(187, 96%, 62%)"
-                      strokeWidth={2}
-                      dot={{ fill: "hsl(187, 96%, 62%)", r: 3 }}
-                      activeDot={{ r: 5, fill: "hsl(187, 96%, 62%)" }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </CardContent>
-          </Card>
+          {/* Charts - Updated card styling */}
+          <div className="space-y-6">
+            {/* Average Demand by Hour */}
+            <Card className="border-white/10 bg-white/95 shadow-xl backdrop-blur-xl">
+              <CardHeader>
+                <CardTitle className="text-gray-800">Average Demand by Hour</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Typical bike rental patterns throughout the day
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer
+                  config={{
+                    demand: {
+                      label: "Rides",
+                      color: "#00a651",
+                    },
+                  }}
+                  className="h-[300px] w-full"
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={hourlyData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.1)" />
+                      <XAxis dataKey="hour" stroke="rgba(0,0,0,0.5)" tick={{ fill: "rgba(0,0,0,0.7)" }} />
+                      <YAxis stroke="rgba(0,0,0,0.5)" tick={{ fill: "rgba(0,0,0,0.7)" }} />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Line
+                        type="monotone"
+                        dataKey="demand"
+                        stroke="#00a651"
+                        strokeWidth={2}
+                        dot={{ fill: "#00a651", r: 3 }}
+                        activeDot={{ r: 5, fill: "#00a651" }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </CardContent>
+            </Card>
 
-          {/* Average Demand by Day of Week */}
-          <Card className="border-white/20 bg-white/10 shadow-xl backdrop-blur-xl">
-            <CardHeader>
-              <CardTitle className="text-foreground">Average Demand by Day of Week</CardTitle>
-              <CardDescription className="text-foreground/70">Weekly patterns in bike rental demand</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer
-                config={{
-                  demand: {
-                    label: "Rides",
-                    color: "hsl(187, 96%, 62%)",
-                  },
-                }}
-                className="h-[300px] w-full"
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={weeklyData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                    <XAxis dataKey="day" stroke="rgba(255,255,255,0.5)" tick={{ fill: "rgba(255,255,255,0.7)" }} />
-                    <YAxis stroke="rgba(255,255,255,0.5)" tick={{ fill: "rgba(255,255,255,0.7)" }} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="demand" fill="hsl(187, 96%, 62%)" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </CardContent>
-          </Card>
+            {/* Average Demand by Day of Week */}
+            <Card className="border-white/10 bg-white/95 shadow-xl backdrop-blur-xl">
+              <CardHeader>
+                <CardTitle className="text-gray-800">Average Demand by Day of Week</CardTitle>
+                <CardDescription className="text-gray-600">Weekly patterns in bike rental demand</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer
+                  config={{
+                    demand: {
+                      label: "Rides",
+                      color: "#00a651",
+                    },
+                  }}
+                  className="h-[300px] w-full"
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={weeklyData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.1)" />
+                      <XAxis dataKey="day" stroke="rgba(0,0,0,0.5)" tick={{ fill: "rgba(0,0,0,0.7)" }} />
+                      <YAxis stroke="rgba(0,0,0,0.5)" tick={{ fill: "rgba(0,0,0,0.7)" }} />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="demand" fill="#00a651" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </CardContent>
+            </Card>
 
-          {/* Weather Impact on Demand */}
-          <Card className="border-white/20 bg-white/10 shadow-xl backdrop-blur-xl">
-            <CardHeader>
-              <CardTitle className="text-foreground">Impact of Weather on Demand</CardTitle>
-              <CardDescription className="text-foreground/70">
-                How different weather conditions affect bike rentals
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer
-                config={{
-                  avgDemand: {
-                    label: "Avg Rides",
-                    color: "hsl(187, 96%, 62%)",
-                  },
-                }}
-                className="h-[300px] w-full"
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={weatherData} layout="vertical">
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                    <XAxis type="number" stroke="rgba(255,255,255,0.5)" tick={{ fill: "rgba(255,255,255,0.7)" }} />
-                    <YAxis
-                      dataKey="weather"
-                      type="category"
-                      stroke="rgba(255,255,255,0.5)"
-                      tick={{ fill: "rgba(255,255,255,0.7)" }}
-                      width={100}
-                    />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="avgDemand" fill="hsl(187, 96%, 62%)" radius={[0, 4, 4, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </CardContent>
-          </Card>
+            {/* Weather Impact on Demand */}
+            <Card className="border-white/10 bg-white/95 shadow-xl backdrop-blur-xl">
+              <CardHeader>
+                <CardTitle className="text-gray-800">Impact of Weather on Demand</CardTitle>
+                <CardDescription className="text-gray-600">
+                  How different weather conditions affect bike rentals
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer
+                  config={{
+                    avgDemand: {
+                      label: "Avg Rides",
+                      color: "#0099cc",
+                    },
+                  }}
+                  className="h-[300px] w-full"
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={weatherData} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.1)" />
+                      <XAxis type="number" stroke="rgba(0,0,0,0.5)" tick={{ fill: "rgba(0,0,0,0.7)" }} />
+                      <YAxis
+                        dataKey="weather"
+                        type="category"
+                        stroke="rgba(0,0,0,0.5)"
+                        tick={{ fill: "rgba(0,0,0,0.7)" }}
+                        width={100}
+                      />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="avgDemand" fill="#0099cc" radius={[0, 4, 4, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </CardContent>
+            </Card>
 
-          {/* Key Insights Summary */}
-          <Card className="border-white/20 bg-white/10 shadow-xl backdrop-blur-xl">
-            <CardHeader>
-              <CardTitle className="text-foreground">Key Insights</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3 text-sm text-foreground/80">
-                <li className="flex items-start gap-2">
-                  <span className="mt-1 size-1.5 shrink-0 rounded-full bg-primary" />
-                  <span>
-                    <strong className="text-primary">Rush hour peaks:</strong> Demand spikes during morning (7-9am) and
-                    evening (5-7pm) commute hours, with 6pm being the busiest time.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="mt-1 size-1.5 shrink-0 rounded-full bg-primary" />
-                  <span>
-                    <strong className="text-primary">Weekend boost:</strong> Saturday sees the highest demand at 5,800
-                    rides, followed by Sunday at 5,200 rides.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="mt-1 size-1.5 shrink-0 rounded-full bg-primary" />
-                  <span>
-                    <strong className="text-primary">Weather matters:</strong> Clear weather drives the most demand,
-                    while heavy rain and snow reduce ridership by over 75%.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="mt-1 size-1.5 shrink-0 rounded-full bg-primary" />
-                  <span>
-                    <strong className="text-primary">Late night lull:</strong> Demand drops significantly between 1-5am,
-                    with the lowest point at 3am averaging only 25 rides.
-                  </span>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
+            {/* Key Insights Summary */}
+            <Card className="border-white/10 bg-white/95 shadow-xl backdrop-blur-xl">
+              <CardHeader>
+                <CardTitle className="text-gray-800">Key Insights</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="mt-1 size-1.5 shrink-0 rounded-full bg-[#00a651]" />
+                    <span>
+                      <strong className="text-[#00a651]">Rush hour peaks:</strong> Demand spikes during morning (7-9am)
+                      and evening (5-7pm) commute hours, with 6pm being the busiest time.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-1 size-1.5 shrink-0 rounded-full bg-[#00a651]" />
+                    <span>
+                      <strong className="text-[#00a651]">Weekend boost:</strong> Saturday sees the highest demand at
+                      5,800 rides, followed by Sunday at 5,200 rides.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-1 size-1.5 shrink-0 rounded-full bg-[#00a651]" />
+                    <span>
+                      <strong className="text-[#00a651]">Weather matters:</strong> Clear weather drives the most demand,
+                      while heavy rain and snow reduce ridership by over 75%.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-1 size-1.5 shrink-0 rounded-full bg-[#00a651]" />
+                    <span>
+                      <strong className="text-[#00a651]">Late night lull:</strong> Demand drops significantly between
+                      1-5am, with the lowest point at 3am averaging only 25 rides.
+                    </span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

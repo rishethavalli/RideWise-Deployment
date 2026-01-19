@@ -1,30 +1,9 @@
 import streamlit as st
-import pickle
 import numpy as np
-from pathlib import Path
 
-# Load models from backend directory
-MODEL_DIR = Path(__file__).resolve().parent
+# Note: Model files are in Git LFS and cannot be deployed to Streamlit Cloud
+# Using fallback heuristic predictions instead
 
-@st.cache_resource
-def load_models():
-    """Load the trained models"""
-    try:
-        with open(MODEL_DIR / "hour_model.pkl", "rb") as f:
-            hour_model = pickle.load(f)
-        with open(MODEL_DIR / "day_model.pkl", "rb") as f:
-            day_model = pickle.load(f)
-        with open(MODEL_DIR / "hour_features.pkl", "rb") as f:
-            hour_features = pickle.load(f)
-        with open(MODEL_DIR / "day_features.pkl", "rb") as f:
-            day_features = pickle.load(f)
-        return hour_model, day_model, hour_features, day_features
-    except Exception as e:
-        st.error(f"Error loading models: {e}")
-        return None, None, [], []
-
-# Load models
-hour_model, day_model, hour_features, day_features = load_models()
 
 # App title and description
 st.title("🚴 RideWise: Bike Demand Prediction")
@@ -87,43 +66,29 @@ feature_dict = {
 
 # Prediction button
 if st.button("🔮 Predict Bike Demand", type="primary"):
-    if hour_model and hour_features:
-        try:
-            # Extract features in the correct order
-            values = [feature_dict.get(f, 0) for f in hour_features]
-            X = np.array(values).reshape(1, -1)
-            
-            # Make prediction
-            prediction = hour_model.predict(X)[0]
-            
-            # Display results
-            st.success("### Prediction Result")
-            st.metric(label="Predicted Hourly Bike Demand", 
-                     value=f"{int(prediction)} bikes",
-                     delta="Model-based prediction")
-            
-            # Additional insights
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.info(f"🌡️ Temperature: {temperature}°C")
-            with col2:
-                st.info(f"💧 Humidity: {humidity}%")
-            with col3:
-                st.info(f"🌬️ Wind: {wind_speed} km/h")
-                
-        except Exception as e:
-            st.error(f"Prediction error: {e}")
-            # Fallback prediction
-            base = 180
-            season_mult = {"spring": 1.1, "summer": 1.3, "fall": 1.0, "winter": 0.7}
-            weather_mult = {"clear": 1.2, "cloudy": 1.0, "rain": 0.7, "storm": 0.4}
-            
-            fallback = int(base * season_mult[season] * weather_mult[weather] * 
-                          (temperature / 20.0) * (1.2 if is_workingday else 0.8))
-            
-            st.warning(f"Using fallback prediction: **{fallback} bikes**")
-    else:
-        st.error("Models not loaded. Please check model files.")
+    # Use fallback prediction (models not available in Streamlit Cloud)
+    base = 180
+    season_mult = {"spring": 1.1, "summer": 1.3, "fall": 1.0, "winter": 0.7}
+    weather_mult = {"clear": 1.2, "cloudy": 1.0, "rain": 0.7, "storm": 0.4}
+    
+    fallback = int(base * season_mult[season] * weather_mult[weather] * 
+                  (temperature / 20.0) * (1.2 if is_workingday else 0.8) *
+                  (0.9 if is_holiday else 1.0))
+    
+    # Display results
+    st.success("### Prediction Result")
+    st.metric(label="Predicted Hourly Bike Demand", 
+             value=f"{fallback} bikes",
+             delta="Heuristic prediction")
+    
+    # Additional insights
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.info(f"🌡️ Temperature: {temperature}°C")
+    with col2:
+        st.info(f"💧 Humidity: {humidity}%")
+    with col3:
+        st.info(f"🌬️ Wind: {wind_speed} km/h")
 
 # Footer
 st.markdown("---")

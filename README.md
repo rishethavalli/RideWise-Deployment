@@ -4,6 +4,10 @@ RideWise is a full-stack machine learning application that predicts bike-sharing
 
 ## 📋 Overview
 
+
+
+
+
 ### Backend (FastAPI + Machine Learning)
 The backend serves as a RESTful API powered by FastAPI, utilizing pre-trained machine learning models (`.pkl` files) to predict bike demand at both hourly and daily granularities. Key features include:
 
